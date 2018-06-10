@@ -11,30 +11,108 @@ HT.Elements = {
 };
 
 HT.Store = {
-    TipoComercio: [{
+    TipoEmpreendimento: [{
+        Identifier: "RU",
+        Nome: "Residencial - Unifamiliar",
+        HasCategory: false
+    },{
+        Identifier: "RM",
+        Nome: "Residencial - Multifamiliar",
+        HasCategory: false
+    },{
+        Identifier: "C",
+        Nome: "Comercial / Serviço",
+        HasCategory: true
+    },{
+        Identifier: "IT",
+        Nome: "Institucional",
+        HasCategory: true
+    },{
+        Identifier: "ID",
+        Nome: "Industrial",
+        HasCategory: true
+    }],
+
+    CategoriaEmpreendimento: [{
         Nome: "Alfaiataria",
-        Grupo: "L1"
+        GrupoCategoria: "L1"
     }, {
         Nome: " Aluguel de Roupas",
-        Grupo: "L1"
+        GrupoCategoria: "L1"
     },{
         Nome: "Armarinho",
-        Grupo: "L1"
+        GrupoCategoria: "L1"
     }]
 }
 
+HT.Regras = [{
+    Tipo: "RU",
+    Zona: "ZR1",
+    Grupo: "TODOS"
+}]
+
 HT.ProcessaLocation = function(loc){
+    var zonaResult = null;
     HT.Store.Zonas.features.forEach(function(zona, zonaIndex){
         if(HT.PolygonContainsLocation(zona.geometry.coordinates[0][0], loc)){
-            return zona;
+            zonaResult = zona;
+            return;
         }
     });
+    return zonaResult;
+}
+
+HT.TranslateZona = function(zona){
+    return "ZR1";
+}
+
+HT.ShowResult = function(type){
+    $("#empty-result").hide();
+    $("#success-result").hide();
+    $("#failure-result").hide();
+
+    $("#" + type+ "-result").show();
+}
+
+HT.ProcessaRegra = function(tipo, zona, grupo){ 
+    var result = false;
+    HT.Regras.forEach(function(regra){
+        if(regra.Tipo == tipo && regra.Zona == zona && (regra.Grupo == "TODOS" || regra.Grupo == grupo)){
+            result = true;
+            return;
+        }
+    });
+
+    return result;
 }
 
 HT.ProcessSearch = function(){
    var zona = HT.ProcessaLocation(HT.Elements.CurrentMarker.position);
    if(zona != null){
-    
+        var tipo = HT.Store.TipoEmpreendimento[parseInt($("#typebox").select2("val"), 10)];
+        if(tipo == null){
+            HT.ShowResult("empty");
+            return
+        }
+
+        var categoria = null;
+        if(tipo.HasCategory){
+            categoria = HT.Store.CategoriaEmpreendimento[parseInt($("#categorybox").select2("val"), 10)];
+            if(categoria == null){
+                HT.ShowResult("empty");
+                return
+            }
+            else
+                categoria = categoria.GrupoCategoria;
+        }
+        var result = HT.ProcessaRegra(tipo.Identifier, HT.TranslateZona(zona) ,categoria );
+        if(result){
+            HT.ShowResult("success");
+        }else{
+            HT.ShowResult("failure");
+        }
+   }else{
+        HT.ShowResult("empty");
    }
 }
 
@@ -54,18 +132,49 @@ HT.PolygonContainsLocation = function(pol, loc){
     return inside;
 };
 
+HT.LoadCategoryCombobox = function(type){
+    var index = parseInt(type.id,10);
+    var tipo = HT.Store.TipoEmpreendimento[index];
+    if(tipo.HasCategory){
+        $('#categorybox').html("");
+        HT.Store.CategoriaEmpreendimento.forEach(function(item, itemIndex){
+            $('#categorybox').append("<option value='"+itemIndex+"'>"+item.Nome+"</option>");
+        });
+
+        $('#categorybox').select2({
+            placeholder: $('#categorybox').attr("placeholder"),
+            allowClear: false,
+        }).on('select2:select', function (e) {
+            HT.ProcessSearch();
+        });
+        $("#categorybox").select2("val", "-1");
+
+        $("#panel-top").css("height", "180px");
+        $('#categorybox-frame').show();
+    }else{
+        $('#categorybox-frame').hide();
+        $("#panel-top").css("height", "120px");
+        HT.ProcessSearch();
+    }
+}
 
 HT.StartMap = function () {
     HT.Elements.Searchbox = document.getElementById('searchbox');
     HT.Elements.Searchbox.value = HT.Define.InitialAddress;
 
-    HT.Store.TipoComercio.forEach(function(item, itemIndex){
+    HT.Store.TipoEmpreendimento.forEach(function(item, itemIndex){
         $('#typebox').append("<option value='"+itemIndex+"'>"+item.Nome+"</option>");
     });
 
     $('#typebox').select2({
-        placeholder: $('#typebox').attr("placeholder")
+        placeholder: $('#typebox').attr("placeholder"),
+        allowClear: false,
+    }).on('select2:select', function (e) {
+        HT.LoadCategoryCombobox(e.params.data)
     });
+    $("#typebox").select2("val", "-1");
+
+    $('#categorybox-frame').hide();
 
     HT.GetDefaultAddressCoordinates(function (response) {
         if (response.Success) {

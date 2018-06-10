@@ -73,7 +73,7 @@
             padding: 15px;
         }
 
-        #result-empty {
+        #empty-result {
             margin: 0 auto;
             border: 2px dashed #d4d4d4;
             padding: 20px;
@@ -86,6 +86,10 @@
             width: 100%;
         } 
 
+        .select2 {
+            width: 100% !important;
+        }
+
         .select2-selection.select2-selection--single{
             height: 36px !important;
             padding-top: 3px !important;
@@ -97,20 +101,48 @@
             margin-right: 8px !important;
         }
 
+
+        #success-result{
+            color: green;
+        }
+
+        #failure-result {
+            color: red;
+        }
+
+        #success-result,
+        #failure-result
+         {
+            border-radius: 5px;
+            box-shadow: 0px 0px 3px #00000045;
+            padding: 20px;
+            display: none;
+        }
+
+        #success-result i,
+        #failure-result i {
+            font-size: 35px;
+            margin-right: 20px;
+        }
     </style>
 
     <div id="panel">
         <div id="panel-top">
             <div class="form-group" style="margin-bottom: 0;">
                 <div id="searchbox-frame" class="input-group mb-3">
-                    <input id="searchbox" class="form-control" name="searchbox" placeholder="Pesquise o endereço" />
+                    <input id="searchbox" class="form-control" name="searchbox" placeholder="Pesquise o endereço do empreendiemnto" />
                     <div class="input-group-append">
                         <span class="input-group-text"><i class="fas fa-search"></i></span>
                     </div>
                 </div>
 
                 <div id="typebox-frame" class="input-group mb-3">
-                    <select id="typebox" class="form-control" placeholder="Selecionar categoria de solo">
+                    <select id="typebox" class="form-control" placeholder="Selecione o tipo de empreendimento">
+                    </select>            
+                </div>
+
+                <div id="categorybox-frame" class="input-group mb-3">
+                    <select id="categorybox" class="form-control" placeholder="Selecione a categoria do empreendimento">
                     </select>            
                 </div>
             </div>
@@ -118,8 +150,27 @@
         <div id="footer"></div>
         <div id="result">
             <label>Resultado da pesquisa:</label>
-            <div id="result-empty">
+            <div id="empty-result">
                 Selecione um endereço e um tipo de estabelecimento para continuar...
+            </div>
+            <div id="success-result">
+                <table>
+                    <tr>
+                        <td rowspan="2"><i class="fas fa-check"></i></td>
+                        <td>Este terreno está apto a receber seu empreendimento!</td>
+                    </tr>
+                    <tr>
+                        <td><a href="xx">Mais informações</a></td>
+                    </tr>
+                </table>
+            </div>
+            <div id="failure-result">
+                <table>
+                    <tr>
+                        <td><i class="fas fa-times"></i></td>
+                        <td>Este terreno não está apto a receber seu empreendimento!</td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>
