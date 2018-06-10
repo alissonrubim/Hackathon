@@ -6,6 +6,9 @@
     <title>APA - Análise Prévia de Alvará</title>
     <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="css/fontawesome-all.min.css" rel="stylesheet" type="text/css" />
+    <link href="css/bootstrap-combobox" rel="stylesheet" type="text/css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+
 </head>
 <body>
    
@@ -13,6 +16,8 @@
         html, body {
             padding: 0;
             margin: 0;
+            display: table;
+            width: 100%;
         }
 
         #panel {
@@ -20,12 +25,9 @@
             min-height: 500px;
             height: 100vh;
             background-color: white;
-            border-radius: 5px;
-            position: absolute;
-            top: 15px;
-            left: 15px;
             z-index: 999;
             box-shadow: 0px 0px 8px #0000002b;
+            position: relative;
         }
 
         #searchbox {
@@ -64,6 +66,7 @@
         #map {
             width: 100%;
             height: 100vh;
+            display: table-cell;
         }
 
         #result {
@@ -78,27 +81,39 @@
             border-radius: 10px;
             color: #c1c1c1;
         }
+
+        .twitter-typeahead{
+            width: 100%;
+        } 
+
+        .select2-selection.select2-selection--single{
+            height: 36px !important;
+            padding-top: 3px !important;
+            border: 1px solid #d2d0d0 !important;
+        }
+
+        .select2-selection__arrow{
+            margin-top: 4px !important;
+            margin-right: 8px !important;
+        }
+
     </style>
 
     <div id="panel">
         <div id="panel-top">
-            <div id="searchbox-frame" class="input-group mb-3">
-                <input id="searchbox" class="form-control" name="searchbox" placeholder="Pesquise o endereço" />
-                <div class="input-group-append">
-                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+            <div class="form-group" style="margin-bottom: 0;">
+                <div id="searchbox-frame" class="input-group mb-3">
+                    <input id="searchbox" class="form-control" name="searchbox" placeholder="Pesquise o endereço" />
+                    <div class="input-group-append">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    </div>
+                </div>
+
+                <div id="typebox-frame" class="input-group mb-3">
+                    <select id="typebox" class="form-control" placeholder="Selecionar categoria de solo">
+                    </select>            
                 </div>
             </div>
-
-            <div class="form-group" style="margin-bottom: 0;">
-                <select class="form-control" id="exampleFormControlSelect1">
-                    <option>Tipo de estabelecimento</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </select>
-            </div>
-            
         </div>
         <div id="footer"></div>
         <div id="result">
@@ -112,11 +127,12 @@
     <div id="map"></div>
 
 
-
-
     <script src="scripts/jquery.js"></script>
     <script src="scripts/bootstrap.min.js"></script>
+    <script src="scripts/bootstrap-combobox.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
     <script src="scripts/Hackathon.js"></script>
+    <script src="store/zonas.geojson"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAh09Z-pCbzQzNu_nBmOMsTmsdmYHybjVg&libraries=places&callback=HT.StartMap" async defer></script>
 
 </body>

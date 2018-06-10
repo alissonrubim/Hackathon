@@ -10,9 +10,62 @@ HT.Elements = {
     Searchbox: null
 };
 
+HT.Store = {
+    TipoComercio: [{
+        Nome: "Alfaiataria",
+        Grupo: "L1"
+    }, {
+        Nome: " Aluguel de Roupas",
+        Grupo: "L1"
+    },{
+        Nome: "Armarinho",
+        Grupo: "L1"
+    }]
+}
+
+HT.ProcessaLocation = function(loc){
+    HT.Store.Zonas.features.forEach(function(zona, zonaIndex){
+        if(HT.PolygonContainsLocation(zona.geometry.coordinates[0][0], loc)){
+            return zona;
+        }
+    });
+}
+
+HT.ProcessSearch = function(){
+   var zona = HT.ProcessaLocation(HT.Elements.CurrentMarker.position);
+   if(zona != null){
+    
+   }
+}
+
+HT.PolygonContainsLocation = function(pol, loc){
+    var x = loc.lng(), y = loc.lat();
+    
+    var inside = false;
+    for (var i = 0, j = pol.length - 1; i < pol.length; j = i++) {
+        var xi = pol[i][0], yi = pol[i][1];
+        var xj = pol[j][0], yj = pol[j][1];
+        
+        var intersect = ((yi > y) != (yj > y))
+            && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+        if (intersect) inside = !inside;
+    }
+    
+    return inside;
+};
+
+
 HT.StartMap = function () {
     HT.Elements.Searchbox = document.getElementById('searchbox');
-     HT.Elements.Searchbox.value = HT.Define.InitialAddress;
+    HT.Elements.Searchbox.value = HT.Define.InitialAddress;
+
+    HT.Store.TipoComercio.forEach(function(item, itemIndex){
+        $('#typebox').append("<option value='"+itemIndex+"'>"+item.Nome+"</option>");
+    });
+
+    $('#typebox').select2({
+        placeholder: $('#typebox').attr("placeholder")
+    });
 
     HT.GetDefaultAddressCoordinates(function (response) {
         if (response.Success) {
@@ -20,7 +73,8 @@ HT.StartMap = function () {
 
             HT.Elements.Map = new google.maps.Map(document.getElementById('map'), {
                 center: position,
-                zoom: 14
+                zoom: 14,
+                streetViewControl: false,
             });
 
             HT.Elements.CurrentMarker = new google.maps.Marker({
@@ -35,13 +89,14 @@ HT.StartMap = function () {
                     'latLng': this.position
                  }, function (results, status) {
                     if (status === google.maps.GeocoderStatus.OK) {
-                      if (results.length > 1) {
-                        HT.Elements.Searchbox.value = results[0].formatted_address
-                      } else {
-                        alert('No results found');
-                      }
+                        if (results.length > 1) {
+                            HT.Elements.Searchbox.value = results[0].formatted_address;
+                            HT.ProcessSearch();
+                        } else {
+                            alert('No results found');
+                        }
                     } else {
-                      alert('Geocoder failed due to: ' + status);
+                        alert('Geocoder failed due to: ' + status);
                     }
                   });
             });
@@ -54,9 +109,8 @@ HT.StartMap = function () {
                 HT.Elements.Map.setCenter(place.geometry.location);
                 HT.Elements.CurrentMarker.setPosition(place.geometry.location);
                 HT.Elements.Map.setZoom(17);
+                HT.ProcessSearch();
             });
-
-
         } else {
             alert("Ocorreu um erro ao buscar os dados da coordenada");
         }
