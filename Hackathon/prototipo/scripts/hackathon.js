@@ -217,13 +217,28 @@ HT.LoadCategoryCombobox = function(type){
         });
         $("#categorybox").select2("val", "-1");
 
-        $("#panel-top").css("height", "180px");
+        $("#panel-top").addClass("three-fields-height");
         $('#categorybox-frame').show();
     }else{
         $('#categorybox-frame').hide();
-        $("#panel-top").css("height", "120px");
+        $("#panel-top").removeClass("three-fields-height");
         HT.ProcessSearch();
     }
+}
+
+HT.MOB_ShowSideBar = function(){
+    $("#buttonColapse").hide();
+    $("#panel").animate({
+        "margin-left": "0px"
+    }, 200);
+}
+
+HT.MOB_HideSideBar = function(){
+    $("#panel").animate({
+        "margin-left": "-400px"
+    }, 200, function(){
+        $("#buttonColapse").show();
+    });
 }
 
 HT.StartMap = function () {
@@ -260,6 +275,14 @@ HT.StartMap = function () {
         HT.ProcessMoreInfo()
     })
 
+    $("#buttonColapse").click(function(){
+        HT.MOB_ShowSideBar()
+    })
+
+    $("#buttonColapseRemove").click(function(){
+        HT.MOB_HideSideBar()
+    })
+
     HT.GetDefaultAddressCoordinates(function (response) {
         if (response.Success) {
             var position = response.Result.results[0].geometry.location;
@@ -268,6 +291,11 @@ HT.StartMap = function () {
                 center: position,
                 zoom: 14,
                 streetViewControl: false,
+                mapTypeControl: true,
+                mapTypeControlOptions: {
+                    style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                    position: google.maps.ControlPosition.BOTTOM_LEFT
+                }
             });
 
             HT.Elements.CurrentMarker = new google.maps.Marker({

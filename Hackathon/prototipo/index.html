@@ -50,6 +50,10 @@
             background-image: url("images/top-bg.jpg");
         }
 
+        #panel-top.three-fields-height{
+            height: 180px !important;
+        }
+
         #footer {
             background-color: #006591;
             width: 100%;
@@ -148,6 +152,48 @@
             padding: 20px;
         }
 
+        #buttonColapse {
+            display: none;
+        }
+
+        #buttonColapseRemove-container {
+            display: none;
+        }
+
+        @media only screen and (max-width: 600px) {
+            #panel {
+                position: absolute;
+                margin-left: -400px;
+            }
+
+            #panel-top{
+                height: 160px;
+            }
+
+            #panel-top.three-fields-height{
+                height: 220px !important;
+            }
+
+
+
+            #buttonColapse {
+                position: absolute;
+                display: block;
+                top: 15px;
+                left: 15px;
+                z-index: 9999;
+            }
+
+            #buttonColapseRemove-container {
+                display: block;
+            }
+            #buttonColapseRemove{
+                float: right;
+                color: white;
+                font-size: 20px;
+            }
+        }
+
     </style>
 
     <div id="modal-inicial" style="display: none">
@@ -161,6 +207,10 @@
 
     <div id="panel">
         <div id="panel-top">
+                
+            <div id="buttonColapseRemove-container">
+                <div id="buttonColapseRemove"><i class="fas fa-arrow-alt-circle-left"></i></div>
+            </div>
             <div class="form-group" style="margin-bottom: 0;">
                 <div id="searchbox-frame" class="input-group mb-3">
                     <input id="searchbox" class="form-control" name="searchbox" placeholder="Pesquise o endereço do empreendiemnto" />
@@ -184,7 +234,7 @@
         <div id="result">
             <label>Resultado da pesquisa:</label>
             <div id="empty-result">
-                Selecione um endereço e um tipo de estabelecimento para continuar...
+                Selecione um endereço e o tipo de empreendimento para continuar...
             </div>
             <div id="success-result">
                 <table>
@@ -247,6 +297,10 @@
         </div>
     </div>
 
+    <div id="buttonColapse">
+        <button type="button" class="btn btn-info"><i class="fas fa-bars"></i></button>
+    </div>
+
     <div id="map"></div>
 
 
@@ -254,7 +308,7 @@
     <script src="scripts/bootstrap.min.js"></script>
     <script src="scripts/bootstrap-combobox.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
-    <script src="scripts/Hackathon.js"></script>
+    <script src="scripts/hackathon.js"></script>
     <script src="store/zonas.geojson"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAh09Z-pCbzQzNu_nBmOMsTmsdmYHybjVg&libraries=places&callback=HT.StartMap" async defer></script>
 
