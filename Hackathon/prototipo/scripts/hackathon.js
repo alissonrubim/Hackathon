@@ -1,7 +1,7 @@
 HT = {}
 
 HT.Define = {
-    InitialAddress: "Rua Batista de Oliveira, Centro, Juiz de Fora, Minas Gerais, Brazil"
+    InitialAddress: "Parque Halfeld, Juiz de Fora, Minas Gerais, Brazil"
 }
 
 HT.Elements = {
@@ -50,6 +50,73 @@ HT.Regras = [{
     Zona: "ZR1",
     Grupo: "TODOS"
 }]
+
+HT.ShowMoreInfo = function(){
+    $("#more-info-tr").show();
+    $("#more-info-link").hide();
+}
+
+HT.UpdateMoreInfo = function(a,b,c,d){
+    $("#mi-a").html(a);
+    $("#mi-b").html(b + "%");
+    $("#mi-c").html(c);
+    $("#mi-d").html(d);
+}
+
+HT.ProcessMoreInfo = function(){
+    var area = parseInt($("input#area").val(),10);
+    var testada = parseInt($("input#testada").val(),10);
+
+    if(area < 300){
+        HT.UpdateMoreInfo(1, 65, 3, 0);
+    }else if(area >= 300 && area < 360){
+        if(testada < 10){
+            HT.UpdateMoreInfo(1.7, 65, 3, (area == 300) ? 1.5 : 0);
+        }else{
+            HT.UpdateMoreInfo(2.4, 65, 3, (area == 300) ? 1.5 : 0);
+        }
+    }else if(area >= 360 && area < 450){
+        if(testada < 10){
+            HT.UpdateMoreInfo(2.5, 50, 3, (area == 300) ? 1.5 : 1.5);
+        }else  if(testada < 12){
+            HT.UpdateMoreInfo(2.8, 50, 3, (area == 300) ? 1.5 : 1.5);
+        }else{
+            HT.UpdateMoreInfo(3.0, 50, 3, (area == 300) ? 1.5 : 1.5);
+        }
+    }else if(area >= 450 && area < 550){
+        if(testada < 10){
+            HT.UpdateMoreInfo(2.5, 50, 3, (area == 300) ? 1.5 : 1.5);
+        }else  if(testada < 12){
+            HT.UpdateMoreInfo(2.8, 50, 3, (area == 300) ? 1.5 : 1.5);
+        }else{
+            HT.UpdateMoreInfo(3.0, 50, 3, (area == 300) ? 1.5 : 1.5);
+        }
+    }else if(area >= 550 && area < 700){
+        if(testada < 10){
+            HT.UpdateMoreInfo(2.5, 50, 3, (area == 300) ? 1.5 : 1.5);
+        }else  if(testada < 12){
+            HT.UpdateMoreInfo(2.8, 50, 3, (area == 300) ? 1.5 : 1.5);
+        }else{
+            HT.UpdateMoreInfo(3.0, 50, 3, (area == 300) ? 1.5 : 1.5);
+        }
+    }else if(area >= 700 && area < 1200){
+        if(testada < 10){
+            HT.UpdateMoreInfo(2.5, 50, 3, (area == 300) ? 1.5 : 1.5);
+        }else  if(testada < 12){
+            HT.UpdateMoreInfo(2.8, 50, 3, (area == 300) ? 1.5 : 1.5);
+        }else{
+            HT.UpdateMoreInfo(3.0, 50, 3, (area == 300) ? 1.5 : 1.5);
+        }
+    }else if(area >= 1200){
+        if(testada < 10){
+            HT.UpdateMoreInfo(2.5, 50, 3, (area == 300) ? 1.5 : 1.5);
+        }else  if(testada < 12){
+            HT.UpdateMoreInfo(2.8, 50, 3, (area == 300) ? 1.5 : 1.5);
+        }else{
+            HT.UpdateMoreInfo(3.0, 50, 3, (area == 300) ? 1.5 : 1.5);
+        }
+    }
+}
 
 HT.ProcessaLocation = function(loc){
     var zonaResult = null;
@@ -136,6 +203,7 @@ HT.LoadCategoryCombobox = function(type){
     var index = parseInt(type.id,10);
     var tipo = HT.Store.TipoEmpreendimento[index];
     if(tipo.HasCategory){
+        HT.ShowResult("empty");
         $('#categorybox').html("");
         HT.Store.CategoriaEmpreendimento.forEach(function(item, itemIndex){
             $('#categorybox').append("<option value='"+itemIndex+"'>"+item.Nome+"</option>");
@@ -159,6 +227,14 @@ HT.LoadCategoryCombobox = function(type){
 }
 
 HT.StartMap = function () {
+    $("#btnContinue").click(function(){
+        $("#modal-inicial").hide(0);
+    })
+
+    $("#more-info-link").click(function(){
+        HT.ShowMoreInfo();
+    })
+
     HT.Elements.Searchbox = document.getElementById('searchbox');
     HT.Elements.Searchbox.value = HT.Define.InitialAddress;
 
@@ -175,6 +251,14 @@ HT.StartMap = function () {
     $("#typebox").select2("val", "-1");
 
     $('#categorybox-frame').hide();
+
+    $("input#area").keyup(function(){
+        HT.ProcessMoreInfo()
+    })
+
+    $("input#testada").keyup(function(){
+        HT.ProcessMoreInfo()
+    })
 
     HT.GetDefaultAddressCoordinates(function (response) {
         if (response.Success) {

@@ -28,6 +28,7 @@
             z-index: 999;
             box-shadow: 0px 0px 8px #0000002b;
             position: relative;
+            overflow: auto;
         }
 
         #searchbox {
@@ -124,7 +125,39 @@
             font-size: 35px;
             margin-right: 20px;
         }
+
+        #modal-inicial {
+            width: 100%;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: rgba(255, 255, 255, 0.62);
+            z-index: 9999;
+        }
+
+        #modal-inicial #contents {
+            margin: 0 auto;
+            width: 500px;
+            height: 200px;
+            background-color: white;
+            vertical-align: middle;
+            text-align: center;
+            box-shadow: 0px 0px 5px #c1c1c1;
+            border-radius: 5px;
+            padding: 20px;
+        }
+
     </style>
+
+    <div id="modal-inicial" style="display: none">
+        <div id="contents">
+            <p>Seja bem-vindo(a) ao</p>
+            <p><b>APA</b> - Avaliação Prévia de Alvará</p>
+
+            <button type="button" id="btnContinue" class="btn btn-success">Continuar</button>
+        </div>
+    </div>
 
     <div id="panel">
         <div id="panel-top">
@@ -141,7 +174,7 @@
                     </select>            
                 </div>
 
-                <div id="categorybox-frame" class="input-group mb-3">
+                <div id="categorybox-frame" class="input-group mb-3" style="display: none">
                     <select id="categorybox" class="form-control" placeholder="Selecione a categoria do empreendimento">
                     </select>            
                 </div>
@@ -160,7 +193,46 @@
                         <td>Este terreno está apto a receber seu empreendimento!</td>
                     </tr>
                     <tr>
-                        <td><a href="xx">Mais informações</a></td>
+                        <td><a href="#" id="more-info-link">Obter mais detalhes</a></td>
+                    </tr>
+                    <tr id="more-info-tr" style="display: none">
+                        <td colspan="2" style="color: black;">
+                            <div class="form-group" style="margin-bottom: 0; margin-top: 20px;">
+                                <table>
+                                    <tr>
+                                        <td><label>Área (m2):</label></td>
+                                        <td><label>Testada (m2):</label></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input id="area" class="form-control" name="area" placeholder="Área" /></td>
+                                        <td><input id="testada" class="form-control" name="teste" placeholder="Testada" /></td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <table class="table table-bordered" style="margin-top: 10px;">
+                                <tr>
+                                    <th>Dado</th>
+                                    <th>Valor</th>
+                                </tr>
+                                <tr>
+                                    <td>Coeficiente de aproveitamento máximo</td>
+                                    <td id="mi-a">-</td>
+                                </tr>
+                                <tr>
+                                    <td>Taxa de ocupação máxima</td>
+                                    <td  id="mi-b">-</td>
+                                </tr>
+                                <tr>
+                                    <td>Afastamento frontal mínimo</td>
+                                    <td id="mi-c">-</td>
+                                </tr>
+                                <tr>
+                                    <td>Afastamento lateral e de fundos mínimo</td>
+                                    <td  id="mi-d">-</td>
+                                </tr>
+                            </table>
+                        </td>
                     </tr>
                 </table>
             </div>
