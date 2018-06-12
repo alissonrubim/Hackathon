@@ -21,11 +21,12 @@
         }
 
         #panel {
-            width: 400px;
+            min-width: 400px;
+            max-width: 400px;
             min-height: 500px;
             height: 100vh;
             background-color: white;
-            z-index: 999;
+            z-index: 999; 
             box-shadow: 0px 0px 8px #0000002b;
             position: relative;
             overflow: auto;
@@ -164,6 +165,8 @@
             #panel {
                 position: absolute;
                 margin-left: -400px;
+
+                min-width: 0px;
             }
 
             #panel-top{
@@ -234,7 +237,7 @@
         <div id="result">
             <label>Resultado da pesquisa:</label>
             <div id="empty-result">
-                Selecione um endereço e o tipo de empreendimento para continuar...
+                Esta localização não é um lote válido!
             </div>
             <div id="success-result">
                 <table>
@@ -309,7 +312,7 @@
     <script src="scripts/bootstrap-combobox.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
     <script src="scripts/hackathon.js"></script>
-    <script src="store/zonas.geojson"></script>
+    <script src="store/zonas.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAh09Z-pCbzQzNu_nBmOMsTmsdmYHybjVg&libraries=places&callback=HT.StartMap" async defer></script>
 
 </body>

@@ -314,10 +314,10 @@ HT.StartMap = function () {
                             HT.Elements.Searchbox.value = results[0].formatted_address;
                             HT.ProcessSearch();
                         } else {
-                            alert('No results found');
+                            alert('Nenhum resultado encontrado!');
                         }
                     } else {
-                        alert('Geocoder failed due to: ' + status);
+                        alert("Esta localização não é um lote válido!");
                     }
                   });
             });
